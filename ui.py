@@ -69,11 +69,11 @@ class MainWindow(Tk,CenterWidgetMixin,):
         if cliente:
             campos = self.treeview.item(cliente, 'values')
             confirmar = askokcancel(
-                title='Confirmación',
-                message=f'¿Borrar a {campos[1]} {campos[2]}?',
-                icon=WARNING)
+                title='Confirmación', message=f'¿Borrar a {campos[1]}{campos[2]}?', icon=WARNING)
         if confirmar:
             self.treeview.delete(cliente)
+            # !!! Borrar también en el fichero
+            db.Clientes.borrar(campos[0])
     
 class CreateClientWindow(Toplevel, CenterWidgetMixin):
     def __init__(self, parent):
@@ -132,12 +132,12 @@ class CreateClientWindow(Toplevel, CenterWidgetMixin):
         self.crear.config(state=NORMAL if self.validaciones == [1, 1, 1] 
                             else DISABLED)
 
-    def create_client(self):
+    def create_client(self)::
         self.master.treeview.insert(parent='', index='end', iid=self.dni.get(),values=(self.dni.get(), self.nombre.get(),self.apellido.get()))
+        # !!! Crear también en el fichero
+        db.Clientes.crear(self.dni.get(), self.nombre.get(),
+        self.apellido.get())
         self.close()
-
-    def create_client(self):
-        pass
 
     def close(self):
         self.destroy()
@@ -195,8 +195,10 @@ class EditClientWindow(Toplevel, CenterWidgetMixin):
         [1, 1] else DISABLED)
     def update_client(self):
         cliente = self.master.treeview.focus()
-        self.master.treeview.item( cliente, values=(self.dni.get(), self.nombre.get(),self.apellido.get()))
-        self.close()
+        # Sobreescribir los datos
+        self.master.treeview.item(cliente, values=(self.dni.get(), self.nombre.get(),self.apellido.get()))
+        # !!! Modificar también en el fichero
+        db.Clientes.modificar(self.dni.get(), self.nombre.get(),self.apellido.get())self.close()
     def close(self):
         self.destroy()
         self.update()

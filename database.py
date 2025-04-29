@@ -1,4 +1,5 @@
 import csv
+import config
 class Cliente:
     def __init__(self, dni, nombre, apellido):
         self.dni = dni
@@ -10,7 +11,7 @@ class Cliente:
 
 class Clientes:
     lista = []
-    with open("config.py", newline="\n") as fichero:
+    with open(config.DATABASE_PATH, newline="\n") as fichero:
         reader = csv.reader(fichero, delimiter=";")
         for dni, nombre, apellido in reader:
             cliente = Cliente(dni, nombre, apellido)
@@ -18,7 +19,7 @@ class Clientes:
 
     @staticmethod
     def guardar():
-        with open("config.py","w", newline="\n") as fichero:
+        with open(config.DATABASE_PATH,"w", newline="\n") as fichero:
             writer = csv.writer(fichero, delimiter=";")
             for c in Clientes.lista:
                 writer.writerow((c.dni, c.nombre, c.apellido))

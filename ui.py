@@ -132,7 +132,7 @@ class CreateClientWindow(Toplevel, CenterWidgetMixin):
         self.crear.config(state=NORMAL if self.validaciones == [1, 1, 1] 
                             else DISABLED)
 
-    def create_client(self)::
+    def create_client(self):
         self.master.treeview.insert(parent='', index='end', iid=self.dni.get(),values=(self.dni.get(), self.nombre.get(),self.apellido.get()))
         # !!! Crear también en el fichero
         db.Clientes.crear(self.dni.get(), self.nombre.get(),
@@ -198,7 +198,8 @@ class EditClientWindow(Toplevel, CenterWidgetMixin):
         # Sobreescribir los datos
         self.master.treeview.item(cliente, values=(self.dni.get(), self.nombre.get(),self.apellido.get()))
         # !!! Modificar también en el fichero
-        db.Clientes.modificar(self.dni.get(), self.nombre.get(),self.apellido.get())self.close()
+        db.Clientes.modificar(self.dni.get(), self.nombre.get(),self.apellido.get())
+        self.close()
     def close(self):
         self.destroy()
         self.update()
